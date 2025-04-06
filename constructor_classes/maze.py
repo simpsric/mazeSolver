@@ -7,45 +7,48 @@ class Maze:
         y1,
         num_rows,
         num_cols,
-        win,
+        win=None,
         cell_size_x=100,
         cell_size_y=100,
     ):
-        self.__x1 = x1
-        self.__y1 = y1
-        self.__num_rows = num_rows
-        self.__num_cols = num_cols
-        self.__cell_size_x = cell_size_x
-        self.__cell_size_y = cell_size_y
-        self.__win = win
-        self.__cells = []
+        self._x1 = x1
+        self._y1 = y1
+        self._num_rows = num_rows
+        self._num_cols = num_cols
+        self._cell_size_x = cell_size_x
+        self._cell_size_y = cell_size_y
+        self._win = win
+        self._cells = []
         self.__create_cells()
         
     def __create_cells(self):
-        for col in range(self.__num_cols):
-            for row in range(self.__num_rows):
-                self.__cells.append(
+        for col in range(self._num_cols):
+            col_list = []
+            for row in range(self._num_rows):
+                col_list.append(
                     Cell(
                         1,
                         1,
                         1,
                         1,
-                        self.__win
+                        self._win
                     )
                 )
-        for col in range(self.__num_cols):
-            for row in range(self.__num_rows):
+            self._cells.append(col_list)
+        for col in range(self._num_cols):
+            for row in range(self._num_rows):
                 self.__draw_cell(col, row)
         
     def __draw_cell(self, col, row):
-        x1 = self.__x1 + col * self.__cell_size_x
-        y1 = self.__y1 + row * self.__cell_size_y
-        x2 = x1 + self.__cell_size_x
-        y2 = y1 + self.__cell_size_y
-        self.__cells[row * self.__num_cols + col].draw(x1, y1, x2, y2)
+        x1 = self._x1 + col * self._cell_size_x
+        y1 = self._y1 + row * self._cell_size_y
+        x2 = x1 + self._cell_size_x
+        y2 = y1 + self._cell_size_y
+        self._cells[row][col].draw(x1, y1, x2, y2)
         self.__animate()
         
     def __animate(self):
-        self.__win.redraw()
-        time.sleep(0.05)
+        if self._win is not None:
+            self._win.redraw()
+            time.sleep(0.05)
             
