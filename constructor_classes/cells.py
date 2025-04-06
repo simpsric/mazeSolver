@@ -20,7 +20,15 @@ class Cell:
     def visit(self):
         self._visited = True
         
+    def un_visit(self):
+        self._visited = False
+        
     def draw(self, x1, y1, x2, y2):
+        # Set new x1, y1, x2, y2
+        self._x1 = x1
+        self._y1 = y1
+        self._x2 = x2
+        self._y2 = y2
         if self._win is not None:
             if self._walls["top"]:
                 self._win.draw_line(Line(Point(x1, y1), Point(x2, y1)))
@@ -44,8 +52,11 @@ class Cell:
     def draw_move(self, to_cell, undo=False):
         if self._win is not None:
             if undo:
-                self._win.draw_line(Line(Point((self._x1 + self._x2) // 2, (self._y1 + self._y2) // 2), Point((self._x1 + self._x2) // 2, (self._y1 + self._y2) // 2)), "red")
+                # Draw a line between the centers of the two cells
+                self._win.draw_line(Line(Point((self._x1 + self._x2) // 2, (self._y1 + self._y2) // 2), 
+                                       Point((to_cell._x1 + to_cell._x2) // 2, (to_cell._y1 + to_cell._y2) // 2)), "red")
             else:
-                self._win.draw_line(Line(Point((self._x1 + self._x2) // 2, (self._y1 + self._y2) // 2), Point((to_cell._x1 + to_cell._x2) // 2, (to_cell._y1 + to_cell._y2) // 2)), "gray")
+                self._win.draw_line(Line(Point((self._x1 + self._x2) // 2, (self._y1 + self._y2) // 2), 
+                                       Point((to_cell._x1 + to_cell._x2) // 2, (to_cell._y1 + to_cell._y2) // 2)), "sky blue")
             
         

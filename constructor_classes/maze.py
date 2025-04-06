@@ -26,7 +26,49 @@ class Maze:
         random.seed(self._seed)
         self.__create_cells()
         self.__break_entrance_and_exit()
-        self.__break_walls_r(0, 0)
+        self.__break_walls_r(9, 9)
+        self.__reset_cells_visited()
+        
+    def solve(self):
+        return self.__solve_r(0, 0)
+    
+    def __solve_r(self, c, r):
+        self.__animate()
+        if c == self._num_cols - 1 and r == self._num_rows - 1:
+            return True
+        self._cells[c][r].visit()
+        # For each direction, if cell available, no wall between cells, and cell not visited
+        # Then draw move to that cell, and move to that cell
+        
+        if c + 1 < self._num_cols and not self._cells[c + 1][r].has_been_visited():
+            if not self._cells[c][r]._walls["right"]:
+                self._cells[c][r].draw_move(self._cells[c + 1][r])
+                if self.__solve_r(c + 1, r):
+                    return True
+                else:
+                    self._cells[c][r].draw_move(self._cells[c + 1][r], undo=True)
+        if c - 1 >= 0 and not self._cells[c - 1][r].has_been_visited():
+            if not self._cells[c][r]._walls["left"]:
+                self._cells[c][r].draw_move(self._cells[c - 1][r])
+                if self.__solve_r(c - 1, r):
+                    return True
+                else:
+                    self._cells[c][r].draw_move(self._cells[c - 1][r], undo=True)
+        if r + 1 < self._num_rows and not self._cells[c][r + 1].has_been_visited():
+            if not self._cells[c][r]._walls["bottom"]:
+                self._cells[c][r].draw_move(self._cells[c][r + 1])
+                if self.__solve_r(c, r + 1):
+                    return True
+                else:
+                    self._cells[c][r].draw_move(self._cells[c][r + 1], undo=True)
+        if r - 1 >= 0 and not self._cells[c][r - 1].has_been_visited():
+            if not self._cells[c][r]._walls["top"]:
+                self._cells[c][r].draw_move(self._cells[c][r - 1])
+                if self.__solve_r(c, r - 1):
+                    return True
+                else:
+                    self._cells[c][r].draw_move(self._cells[c][r - 1], undo=True)
+        return False
         
     def __create_cells(self):
         for col in range(self._num_cols):
@@ -57,7 +99,12 @@ class Maze:
     def __animate(self):
         if self._win is not None:
             self._win.redraw()
-            time.sleep(0.05)
+            time.sleep(0.01)
+            
+    def __reset_cells_visited(self):
+        for col in range(self._num_cols):
+            for row in range(self._num_rows):
+                self._cells[col][row].un_visit()
             
     def __break_walls_r(self, r, c):
         current_cell = self._cells[c][r]
@@ -83,8 +130,6 @@ class Maze:
             # Choose a random move
             direction, next_c, next_r = random.choice(next_lst)
             # Knock down the wall between the current cell and the next cell
-            print(next_lst)
-            print(direction, " - ", c,r, " - ", next_c, next_r)
             if direction == "N":
                 current_cell._walls["top"] = False
                 self._cells[next_c][next_r]._walls["bottom"] = False
