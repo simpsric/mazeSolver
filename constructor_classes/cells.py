@@ -19,3 +19,10 @@ class Cell:
         if self.__walls["left"]:
             self.__win.draw_line(Line(Point(self.__x1, self.__y1), Point(self.__x1, self.__y2)))
         
+    def draw_move(self, to_cell, undo=False):
+        if undo:
+            self.__win.draw_line(Line(Point((self.__x1 + self.__x2) // 2, (self.__y1 + self.__y2) // 2), Point((self.__x1 + self.__x2) // 2, (self.__y1 + self.__y2) // 2)), "red")
+        else:
+            self.__win.draw_line(Line(Point((self.__x1 + self.__x2) // 2, (self.__y1 + self.__y2) // 2), Point((to_cell.__x1 + to_cell.__x2) // 2, (to_cell.__y1 + to_cell.__y2) // 2)), "gray")
+            
+        
