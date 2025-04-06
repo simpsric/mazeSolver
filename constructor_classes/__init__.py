@@ -1,1 +1,3 @@
-from .window_class import Window
+from .window_class import *
+from .point_and_line import *
+from .cells import *
