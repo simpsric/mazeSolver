@@ -13,7 +13,7 @@ def main():
     maze_height = window_height - (2 * padding)
     cell_size_x = maze_width // num_cols
     cell_size_y = maze_height // num_rows
-    maze = Maze(padding, padding, num_rows, num_cols, window, cell_size_x, cell_size_y)
+    maze = Maze(padding, padding, num_rows, num_cols, window, cell_size_x, cell_size_y, 0)
     window.wait_for_close()
 
 
